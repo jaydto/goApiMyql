@@ -1,0 +1,128 @@
+basePath: /api/v1
+definitions:
+  types.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  types.LoginUserPayload:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  types.Message:
+    properties:
+      data: {}
+    type: object
+  types.RegisterUserPayload:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        maxLength: 130
+        minLength: 3
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8000
+info:
+  contact:
+    email: johnckaris@gmail.xom
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Go Api
+  version: "1.0"
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user with email and password
+      parameters:
+      - description: Login payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/types.LoginUserPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: message
+          schema:
+            $ref: '#/definitions/types.Message'
+        "400":
+          description: error
+          schema:
+            $ref: '#/definitions/types.Error'
+        "404":
+          description: error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register User with Email and password
+      parameters:
+      - description: Register payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/types.RegisterUserPayload'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/types.Message'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.Error'
+        "404":
+          description: error
+          schema:
+            $ref: '#/definitions/types.Error'
+        "500":
+          description: error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User registration
+      tags:
+      - auth
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

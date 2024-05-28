@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/jaydto/goApiMyql/types"
 )
 
 var Validate=validator.New()
@@ -25,8 +26,15 @@ func WriteJson(w http.ResponseWriter, status int, v any) error {
 	return json.NewEncoder(w).Encode(v)
 
 }
+func WriteMessage(w http.ResponseWriter, status int, v any) {
+	message:=types.Message{Data: v}
+	WriteJson(w, status, message)
+	// WriteJson(w, status, map[string]any{"data":v})
+}
 
 func WriteError(w http.ResponseWriter, status int, err error) {
-	WriteJson(w, status, map[string]string{"error": err.Error()})
+	errorMessage:=types.Error{Error: err.Error()}
+	// WriteJson(w, status, map[string]string{"error": err.Error()})
+	WriteJson(w, status, errorMessage)
 
 }
